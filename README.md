@@ -1,2 +1,26 @@
 # AI Recomendation System
-python3 -m grpc_tools.protoc -I=schemas --python_out=packages/commons/commons/stubs --grpc_python_out=packages/commons/commons/stubs schemas/product-graph.proto
+
+## Setup
+
+
+### Create stubs
+```shell
+python3 -m grpc_tools.protoc -I=schemas --python_out=ai_recommend/adapter/stub schemas/e-commerce-events.proto
+```
+
+### Create topics in Kafka
+```sh
+docker-compose exec kafka kafka-topics --create --topic e-commerce-events --bootstrap-server kafka:9092 --partitions 3 --replication-factor 1
+```
+
+### Register on Schema Registry
+```sh
+curl -X POST http://localhost:8081/subjects/e-commerce-events-value/versions \
+  -H "Content-Type: application/vnd.schemaregistry.v1+json" \
+  -d @- <<EOF
+{
+  "schemaType": "PROTOBUF",
+  "schema": "$(cat schemas/e-commerce-events.proto | sed 's/"/\\"/g' | tr -d '\n')"
+}
+EOF
+```

@@ -1,0 +1,123 @@
+syntax = "proto3";
+
+package ecommerce;
+
+option java_multiple_files = true;
+option java_package = "com.ortisan.ecommerce.proto";
+option java_outer_classname = "ECommerceProto";
+
+import "google/protobuf/timestamp.proto";
+
+message User {
+  string user_id = 1;
+  string email = 2;
+  string name = 3;
+  google.protobuf.Timestamp created_at = 4;
+  google.protobuf.Timestamp updated_at = 5;
+}
+
+message Product {
+  string sku = 1;
+  string name = 2;
+  string description = 3;
+  double price = 4;
+  string category = 5;
+  repeated string tags = 6;
+  string image_url = 7;
+  int32 inventory_count = 8;
+  google.protobuf.Timestamp created_at = 9;
+  google.protobuf.Timestamp updated_at = 10;
+}
+
+message BaseEvent {
+  string event_id = 1;
+  string user_id = 2;
+  string session_id = 3;
+  google.protobuf.Timestamp timestamp = 4;
+  string device_type = 5;
+  string ip_address = 6;
+}
+
+message ProductViewEvent {
+  BaseEvent base = 1;
+  string product_sku = 2;
+  int32 view_duration_seconds = 3;
+  string referrer_url = 4;
+  string page_url = 5;
+}
+
+message AddToCartEvent {
+  BaseEvent base = 1;
+  string product_sku = 2;
+  int32 quantity = 3;
+  double price_at_add = 4;
+  bool is_promotion_applied = 5;
+  string promotion_id = 6;
+}
+
+message RemoveFromCartEvent {
+  BaseEvent base = 1;
+  string product_sku = 2;
+  int32 quantity = 3;
+  string removal_reason = 4;
+}
+
+message PurchaseEvent {
+  BaseEvent base = 1;
+  string order_id = 2;
+  repeated PurchasedItem items = 3;
+  double total_amount = 4;
+  double tax_amount = 5;
+  double shipping_amount = 6;
+  string payment_method = 7;
+  string shipping_address_id = 8;
+  string billing_address_id = 9;
+  string coupon_code = 10;
+  double discount_amount = 11;
+}
+
+message PurchasedItem {
+  string product_sku = 1;
+  int32 quantity = 2;
+  double unit_price = 3;
+  double total_price = 4;
+  bool is_promotion_applied = 5;
+  string promotion_id = 6;
+}
+
+message SearchEvent {
+  BaseEvent base = 1;
+  string search_query = 2;
+  int32 results_count = 3;
+  repeated string filter_categories = 4;
+  string sort_by = 5;
+}
+
+message WishlistEvent {
+  BaseEvent base = 1;
+  string product_sku = 2;
+  enum WishlistAction {
+    ADD = 0;
+    REMOVE = 1;
+  }
+  WishlistAction action = 3;
+}
+
+message RecommendationEvent {
+  BaseEvent base = 1;
+  string recommended_product_sku = 2;
+  string recommendation_type = 3; // e.g., "similar", "frequently_bought_together", "personalized"
+  bool was_clicked = 4;
+}
+
+message ECommerceEvent {
+  oneof event {
+    ProductViewEvent product_view = 1;
+    AddToCartEvent add_to_cart = 2;
+    RemoveFromCartEvent remove_from_cart = 3;
+    PurchaseEvent purchase = 4;
+    SearchEvent search = 5;
+    WishlistEvent wishlist = 6;
+    RecommendationEvent recommendation = 7;
+  }
+}
