@@ -2,14 +2,14 @@ from dependency_injector import containers, providers
 
 from ai_recommend.adapter.output.e_commerce.e_commerce_events_producer import ECommerceEventsProducer
 from ai_recommend.infrastructure.kafka.config import KafkaProducerConfig
-from ai_recommend.infrastructure.observability.logger.loguru.loguru import Loguru
+from ai_recommend.infrastructure.observability.logger.loguru.loguru import LoggerLoguru
 
 
 class CmdContainer(containers.DeclarativeContainer):
     config = providers.Configuration(yaml_files=["config.yaml"])
 
     logger = providers.Factory(
-        Loguru,
+        LoggerLoguru,
         log_level=config.logger.level,
     )
 

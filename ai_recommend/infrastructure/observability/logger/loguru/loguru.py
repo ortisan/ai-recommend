@@ -1,9 +1,9 @@
 from loguru import logger
 import sys
 
-from ai_recommend.infrastructure.observability.logger.logger import ILogger
+from ai_recommend.infrastructure.observability.logger.logger import Logger
 
-class Loguru(ILogger):
+class LoggerLoguru(Logger):
     """
     Loguru logger implementation.
     This class provides methods to log messages at different levels.

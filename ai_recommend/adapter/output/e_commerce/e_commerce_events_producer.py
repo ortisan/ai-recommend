@@ -11,7 +11,7 @@ from confluent_kafka.serialization import (
 
 import ai_recommend.adapter.stub.e_commerce_events_pb2 as e_commerce_events_pb2
 from ai_recommend.infrastructure.kafka.config import KafkaProducerConfig
-from ai_recommend.infrastructure.observability.logger.logger import ILogger
+from ai_recommend.infrastructure.observability.logger.logger import Logger
 
 
 class ECommerceEventsProducer:
@@ -19,7 +19,7 @@ class ECommerceEventsProducer:
     EcomerceEventsProducer is responsible for producing events to a Kafka topic.
     """
 
-    def __init__(self, config: KafkaProducerConfig, logger: ILogger):
+    def __init__(self, config: KafkaProducerConfig, logger: Logger):
         self.config = config
         self.logger = logger
 

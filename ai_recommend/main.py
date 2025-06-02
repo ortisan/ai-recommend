@@ -7,13 +7,13 @@ from ai_recommend.adapter.input.e_commerce.e_commerce_events_consumer import ECo
 from ai_recommend.adapter.output.e_commerce.e_commerce_events_producer import ECommerceEventsProducer
 from ai_recommend.infrastructure.kafka.config import KafkaProducerConfig, KafkaConsumerConfig
 from ai_recommend.infrastructure.observability.logger.loguru.loguru import (
-    Loguru,
+    LoggerLoguru,
 )
 
 topic = "e-commerce-events"
 
 if __name__ == "__main__":
-    logger = Loguru()
+    logger = LoggerLoguru()
     logger.log("AI Recommendation System is starting...")
 
     producer_config = KafkaProducerConfig(
