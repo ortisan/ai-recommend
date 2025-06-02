@@ -3,10 +3,8 @@ from uuid import uuid4
 from google.protobuf.timestamp_pb2 import Timestamp
 
 import ai_recommend.adapter.stub.e_commerce_events_pb2 as e_commerce_events_pb2
-from ai_recommend.adapter.input.ecomerce.e_commerce_events_consumer import ECommerceEventsConsumer
-from ai_recommend.adapter.output.ecomerce.e_commerce_events_producer import (
-    ECommerceEventsProducer,
-)
+from ai_recommend.adapter.input.e_commerce.e_commerce_events_consumer import ECommerceEventsConsumer
+from ai_recommend.adapter.output.e_commerce.e_commerce_events_producer import ECommerceEventsProducer
 from ai_recommend.infrastructure.kafka.config import KafkaProducerConfig, KafkaConsumerConfig
 from ai_recommend.infrastructure.observability.logger.loguru.loguru import (
     Loguru,
@@ -52,11 +50,11 @@ if __name__ == "__main__":
 
     consumer_config = KafkaConsumerConfig(
         bootstrap_servers="localhost:9092",
-        group_id="main_group",
+        consumer_group="main_group",
         auto_offset_reset="earliest",
         schema_registry_url="http://localhost:8081",
         topic=topic,
-        poll_timeout=1.0,
+        poll_timeout_ms=1.0,
         enable_auto_commit=True,
     )
     consumer = ECommerceEventsConsumer(config=consumer_config, logger=logger)

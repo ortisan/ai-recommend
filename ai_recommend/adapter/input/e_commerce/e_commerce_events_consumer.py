@@ -29,7 +29,7 @@ class ECommerceEventsConsumer:
         # Create Kafka consumer
         consumer_conf = {
             "bootstrap.servers": self.config.bootstrap_servers,
-            "group.id": self.config.group_id,
+            "group.id": self.config.consumer_group,
             "auto.offset.reset": self.config.auto_offset_reset,
             "enable.auto.commit": self.config.enable_auto_commit,
         }

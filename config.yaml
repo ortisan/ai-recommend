@@ -1,6 +1,0 @@
-kafka:
-  broker_servers: localhost:9092
-  schema_registry:
-    url: http://localhost:8081
-  e-comerce:
-    topic: products_viewed

@@ -4,19 +4,19 @@ class KafkaConsumerConfig:
     def __init__(
         self,
         bootstrap_servers: str,
-        group_id: str,
+        consumer_group: str,
         auto_offset_reset: str,
         schema_registry_url: str,
         topic: str,
-        poll_timeout: float,
+        poll_timeout_ms: float,
         enable_auto_commit: bool = True,
     ):
         self.bootstrap_servers = bootstrap_servers
-        self.group_id = group_id
+        self.consumer_group = consumer_group
         self.auto_offset_reset = auto_offset_reset
         self.schema_registry_url = schema_registry_url
         self.topic = topic
-        self.poll_timeout = poll_timeout
+        self.poll_timeout = poll_timeout_ms
         self.enable_auto_commit = enable_auto_commit
 
 
