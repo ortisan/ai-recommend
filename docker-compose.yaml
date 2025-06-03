@@ -132,6 +132,39 @@ services:
       - loki
       - jaeger
 
+
+  producer:
+    build:
+      context: .
+      dockerfile: Dockerfile.producer
+    container_name: kafka-producer
+    depends_on:
+      - kafka
+      - schema-registry
+    networks:
+      - ai-network
+    environment:
+      - KAFKA_BROKER_SERVERS=kafka:29092
+      - SCHEMA_REGISTRY_URL=http://schema-registry:8081
+
+  consumer:
+    build:
+      context: .
+      dockerfile: Dockerfile.consumer
+    container_name: kafka-consumer
+    depends_on:
+      - kafka
+      - schema-registry
+      - producer
+    networks:
+      - ai-network
+    environment:
+      - KAFKA_BROKER_SERVERS=kafka:29092
+      - SCHEMA_REGISTRY_URL=http://schema-registry:8081
+      - KAFKA_CONSUMER_GROUP=ai_recommend_consumer_group
+      - KAFKA_AUTO_OFFSET_RESET=earliest
+      - KAFKA_ENABLE_AUTO_COMMIT=true
+
 networks:
   ai-network:
     driver: bridge

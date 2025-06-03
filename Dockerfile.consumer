@@ -1,0 +1,40 @@
+FROM python:3.12-slim
+
+# Set working directory
+WORKDIR /app
+
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PYTHONPATH=/app \
+    KAFKA_BROKER_SERVERS=kafka:29092 \
+    SCHEMA_REGISTRY_URL=http://schema-registry:8081 \
+    KAFKA_CONSUMER_GROUP=ai_recommend_consumer_group \
+    KAFKA_AUTO_OFFSET_RESET=earliest \
+    KAFKA_ENABLE_AUTO_COMMIT=true
+
+# Install dependencies
+COPY pyproject.toml .
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir .
+
+# Copy application code
+COPY ai_recommend/ /app/ai_recommend/
+COPY schemas/ /app/schemas/
+
+# Copy configuration
+COPY ai_recommend/cmd/consumer/config.yaml /app/config.yaml
+
+# Create a script to update the config with environment variables
+RUN echo '#!/bin/bash\n\
+sed -i "s|broker_servers:.*|broker_servers: ${KAFKA_BROKER_SERVERS}|g" /app/config.yaml\n\
+sed -i "s|schema_registry_url:.*|schema_registry_url: ${SCHEMA_REGISTRY_URL}|g" /app/config.yaml\n\
+sed -i "s|consumer_group:.*|consumer_group: ${KAFKA_CONSUMER_GROUP}|g" /app/config.yaml\n\
+sed -i "s|auto_offset_reset:.*|auto_offset_reset: ${KAFKA_AUTO_OFFSET_RESET}|g" /app/config.yaml\n\
+sed -i "s|enable_auto_commit:.*|enable_auto_commit: ${KAFKA_ENABLE_AUTO_COMMIT}|g" /app/config.yaml\n\
+exec "$@"' > /app/entrypoint.sh && \
+chmod +x /app/entrypoint.sh
+
+# Set the entrypoint
+ENTRYPOINT ["/app/entrypoint.sh"]
+CMD ["python", "-m", "ai_recommend.cmd.consumer.main"]
