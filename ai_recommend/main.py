@@ -1,61 +1,114 @@
-from uuid import uuid4
+from uuid import UUID
 
-from google.protobuf.timestamp_pb2 import Timestamp
+from dependency_injector.wiring import Provide, inject
+import os
+from dotenv import load_dotenv
 
-import ai_recommend.adapter.stub.e_commerce_events_pb2 as e_commerce_events_pb2
-from ai_recommend.adapter.input.e_commerce.e_commerce_events_consumer import ECommerceEventsConsumer
-from ai_recommend.adapter.output.e_commerce.e_commerce_events_producer import ECommerceEventsProducer
-from ai_recommend.infrastructure.kafka.config import KafkaProducerConfig, KafkaConsumerConfig
-from ai_recommend.infrastructure.observability.logger.loguru.loguru import (
-    LoggerLoguru,
+from ai_recommend.container import ApplicationContainer
+from ai_recommend.infrastructure.repository.graph_repository import (
+    GraphRepository,
+    NodeFilter,
+    EdgeFilter,
 )
+import networkx as nx
+import iplotx as ipx
 
-topic = "e-commerce-events"
+
+@inject
+def main(
+    graph_repository: GraphRepository = Provide[ApplicationContainer.repository.graph_repository],
+) -> None:
+    """Main application function.
+
+    Demonstrates semantic search capabilities on the knowledge graph.
+
+    Args:
+        graph_repository: GraphRepository instance
+            injected from the container.
+    """
+    node = graph_repository.get_node_by_id(node_id=UUID("019c6c2c-6496-7eb1-85cd-24cd2fe8e9db"))
+    print(f"Node: {node}")
+
+    nodes_by_properties = graph_repository.get_nodes_by_property(
+        label="User", property_key="age.value", property_value="23"
+    )
+    print(f"Nodes: {nodes_by_properties}")
+
+    count_nodes = graph_repository.count_nodes(filter_obj=NodeFilter(label="Product"))
+    print(f"Count Nodes: {count_nodes}")
+
+    edge = graph_repository.get_edge_by_id(edge_id=UUID("019c6c2c-67df-7467-9b96-d5cc93b8c0db"))
+    print(f"Edge: {edge}")
+
+    edges = graph_repository.get_edges_by_property(
+        label="Viewed",
+        property_key="session_id",
+        property_value="019c6c2c-67dc-72bf-93ab-8a7bc9ee19e0",
+    )
+    print(f"Edges: {edges}")
+
+    count_edges = graph_repository.count_edges(filter_obj=EdgeFilter(label="Viewed"))
+    print(f"Count Edges: {count_edges}")
+
+    results = graph_repository.get_node_statistics(
+        node_id=UUID("019c6c2c-6496-7eb1-85cd-24cd2fe8e9db")
+    )
+    print(f"Result: {results}")
+
+    results = graph_repository.get_user_interactions(
+        user_id=UUID("019c6c2c-6496-7eb1-85cd-24cd2fe8e9db")
+    )
+    print(f"Result: {results}")
+
+    graph = graph_repository.graph_traverse(
+        start_node_id=UUID("019c6c2c-6496-7eb1-85cd-24cd2fe8e9db")
+    )
+    print(graph)
+
+    G = nx.Graph()
+    G.add_edge(1, 2)
+    G.add_edge(2, 3, weight=0.9)
+    layout = nx.layout.circular_layout(G)
+    ipx.plot(G, layout)
+
+    # dummy_embedding = [0.1] * 1536  # Replace with actual embedding
+    #
+    # results = graph_repository.semantic_search(
+    #     query_embedding=dummy_embedding,
+    #     match_threshold=0.7,
+    #     match_count=5,
+    #     filter_label="Product",
+    # )
+    # print(f"Found {len(results)} similar products")
+
 
 if __name__ == "__main__":
-    logger = LoggerLoguru()
-    logger.log("AI Recommendation System is starting...")
+    # Load environment variables from .env file in the same directory
+    load_dotenv()
 
-    producer_config = KafkaProducerConfig(
-        bootstrap_servers="localhost:9092",
-        topic=topic,
-        schema_registry_url="http://localhost:8081",
+    # Initialize application container
+    container = ApplicationContainer()
+
+    # Configure database settings from environment using from_dict()
+    container.config.from_dict(
+        {
+            "database": {
+                "graph": {
+                    "host": os.getenv("GRAPH_DB_HOST"),
+                    "port": os.getenv("GRAPH_DB_PORT", "5432"),
+                    "username": os.getenv("GRAPH_DB_USER"),
+                    "password": os.getenv("GRAPH_DB_PASSWORD"),
+                    "database": os.getenv("GRAPH_DB_DATABASE_NAME"),
+                }
+            }
+        }
     )
 
-    timestamp = Timestamp()
+    # Initialize resources after configuration is set
+    container.init_resources()
 
-    base_event = e_commerce_events_pb2.BaseEvent(
-        event_id=str(uuid4()),
-        user_id=str(uuid4()),
-        session_id=str(uuid4()),
-        timestamp=timestamp,
-        device_type="web",
-        ip_address="127.0.0.1",
-    )
+    # Wire the application for dependency injection
+    container.wire(modules=[__name__])
 
-    product_viewed_event = e_commerce_events_pb2.ProductViewEvent(
-        base=base_event,
-        product_sku="sku_12345",
-        view_duration_seconds=30,
-        referrer_url="teste.com",
-        page_url="teste.com/product/12345",
-    )
-    e_commerce_event = e_commerce_events_pb2.ECommerceEvent(
-        product_view=product_viewed_event
-    )
-
-    producer = ECommerceEventsProducer(config=producer_config, logger=logger)
-    producer.produce(message=e_commerce_event)
-
-
-    consumer_config = KafkaConsumerConfig(
-        bootstrap_servers="localhost:9092",
-        consumer_group="main_group",
-        auto_offset_reset="earliest",
-        schema_registry_url="http://localhost:8081",
-        topic=topic,
-        poll_timeout_ms=1.0,
-        enable_auto_commit=True,
-    )
-    consumer = ECommerceEventsConsumer(config=consumer_config, logger=logger)
-    consumer.consume()
+    # Run the main application
+    main()

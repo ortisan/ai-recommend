@@ -1,8 +1,0 @@
-kafka:
-  broker_servers: localhost:9092
-  schema_registry_url: http://localhost:8081
-  pool_timeout_ms: 1000
-  e_commerce:
-    products_viewed_topic: products_viewed
-logger:
-  level: DEBUG

@@ -4,18 +4,15 @@
 # source: e-commerce-events.proto
 # Protobuf Python Version: 5.29.0
 """Generated protocol buffer code."""
+
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import descriptor_pool as _descriptor_pool
 from google.protobuf import runtime_version as _runtime_version
 from google.protobuf import symbol_database as _symbol_database
 from google.protobuf.internal import builder as _builder
+
 _runtime_version.ValidateProtobufRuntimeVersion(
-    _runtime_version.Domain.PUBLIC,
-    5,
-    29,
-    0,
-    '',
-    'e-commerce-events.proto'
+    _runtime_version.Domain.PUBLIC, 5, 29, 0, "", "e-commerce-events.proto"
 )
 # @@protoc_insertion_point(imports)
 
@@ -25,38 +22,26 @@ _sym_db = _symbol_database.Default()
 from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x17\x65-commerce-events.proto\x12\tecommerce\x1a\x1fgoogle/protobuf/timestamp.proto\"\x94\x01\n\x04User\x12\x0f\n\x07user_id\x18\x01 \x01(\t\x12\r\n\x05\x65mail\x18\x02 \x01(\t\x12\x0c\n\x04name\x18\x03 \x01(\t\x12.\n\ncreated_at\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12.\n\nupdated_at\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"\xf4\x01\n\x07Product\x12\x0b\n\x03sku\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x03 \x01(\t\x12\r\n\x05price\x18\x04 \x01(\x01\x12\x10\n\x08\x63\x61tegory\x18\x05 \x01(\t\x12\x0c\n\x04tags\x18\x06 \x03(\t\x12\x11\n\timage_url\x18\x07 \x01(\t\x12\x17\n\x0finventory_count\x18\x08 \x01(\x05\x12.\n\ncreated_at\x18\t \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12.\n\nupdated_at\x18\n \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"\x9a\x01\n\tBaseEvent\x12\x10\n\x08\x65vent_id\x18\x01 \x01(\t\x12\x0f\n\x07user_id\x18\x02 \x01(\t\x12\x12\n\nsession_id\x18\x03 \x01(\t\x12-\n\ttimestamp\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x13\n\x0b\x64\x65vice_type\x18\x05 \x01(\t\x12\x12\n\nip_address\x18\x06 \x01(\t\"\x92\x01\n\x10ProductViewEvent\x12\"\n\x04\x62\x61se\x18\x01 \x01(\x0b\x32\x14.ecommerce.BaseEvent\x12\x13\n\x0bproduct_sku\x18\x02 \x01(\t\x12\x1d\n\x15view_duration_seconds\x18\x03 \x01(\x05\x12\x14\n\x0creferrer_url\x18\x04 \x01(\t\x12\x10\n\x08page_url\x18\x05 \x01(\t\"\xa5\x01\n\x0e\x41\x64\x64ToCartEvent\x12\"\n\x04\x62\x61se\x18\x01 \x01(\x0b\x32\x14.ecommerce.BaseEvent\x12\x13\n\x0bproduct_sku\x18\x02 \x01(\t\x12\x10\n\x08quantity\x18\x03 \x01(\x05\x12\x14\n\x0cprice_at_add\x18\x04 \x01(\x01\x12\x1c\n\x14is_promotion_applied\x18\x05 \x01(\x08\x12\x14\n\x0cpromotion_id\x18\x06 \x01(\t\"x\n\x13RemoveFromCartEvent\x12\"\n\x04\x62\x61se\x18\x01 \x01(\x0b\x32\x14.ecommerce.BaseEvent\x12\x13\n\x0bproduct_sku\x18\x02 \x01(\t\x12\x10\n\x08quantity\x18\x03 \x01(\x05\x12\x16\n\x0eremoval_reason\x18\x04 \x01(\t\"\xb0\x02\n\rPurchaseEvent\x12\"\n\x04\x62\x61se\x18\x01 \x01(\x0b\x32\x14.ecommerce.BaseEvent\x12\x10\n\x08order_id\x18\x02 \x01(\t\x12\'\n\x05items\x18\x03 \x03(\x0b\x32\x18.ecommerce.PurchasedItem\x12\x14\n\x0ctotal_amount\x18\x04 \x01(\x01\x12\x12\n\ntax_amount\x18\x05 \x01(\x01\x12\x17\n\x0fshipping_amount\x18\x06 \x01(\x01\x12\x16\n\x0epayment_method\x18\x07 \x01(\t\x12\x1b\n\x13shipping_address_id\x18\x08 \x01(\t\x12\x1a\n\x12\x62illing_address_id\x18\t \x01(\t\x12\x13\n\x0b\x63oupon_code\x18\n \x01(\t\x12\x17\n\x0f\x64iscount_amount\x18\x0b \x01(\x01\"\x93\x01\n\rPurchasedItem\x12\x13\n\x0bproduct_sku\x18\x01 \x01(\t\x12\x10\n\x08quantity\x18\x02 \x01(\x05\x12\x12\n\nunit_price\x18\x03 \x01(\x01\x12\x13\n\x0btotal_price\x18\x04 \x01(\x01\x12\x1c\n\x14is_promotion_applied\x18\x05 \x01(\x08\x12\x14\n\x0cpromotion_id\x18\x06 \x01(\t\"\x8a\x01\n\x0bSearchEvent\x12\"\n\x04\x62\x61se\x18\x01 \x01(\x0b\x32\x14.ecommerce.BaseEvent\x12\x14\n\x0csearch_query\x18\x02 \x01(\t\x12\x15\n\rresults_count\x18\x03 \x01(\x05\x12\x19\n\x11\x66ilter_categories\x18\x04 \x03(\t\x12\x0f\n\x07sort_by\x18\x05 \x01(\t\"\xa8\x01\n\rWishlistEvent\x12\"\n\x04\x62\x61se\x18\x01 \x01(\x0b\x32\x14.ecommerce.BaseEvent\x12\x13\n\x0bproduct_sku\x18\x02 \x01(\t\x12\x37\n\x06\x61\x63tion\x18\x03 \x01(\x0e\x32\'.ecommerce.WishlistEvent.WishlistAction\"%\n\x0eWishlistAction\x12\x07\n\x03\x41\x44\x44\x10\x00\x12\n\n\x06REMOVE\x10\x01\"\x8c\x01\n\x13RecommendationEvent\x12\"\n\x04\x62\x61se\x18\x01 \x01(\x0b\x32\x14.ecommerce.BaseEvent\x12\x1f\n\x17recommended_product_sku\x18\x02 \x01(\t\x12\x1b\n\x13recommendation_type\x18\x03 \x01(\t\x12\x13\n\x0bwas_clicked\x18\x04 \x01(\x08\"\xfc\x02\n\x0e\x45\x43ommerceEvent\x12\x33\n\x0cproduct_view\x18\x01 \x01(\x0b\x32\x1b.ecommerce.ProductViewEventH\x00\x12\x30\n\x0b\x61\x64\x64_to_cart\x18\x02 \x01(\x0b\x32\x19.ecommerce.AddToCartEventH\x00\x12:\n\x10remove_from_cart\x18\x03 \x01(\x0b\x32\x1e.ecommerce.RemoveFromCartEventH\x00\x12,\n\x08purchase\x18\x04 \x01(\x0b\x32\x18.ecommerce.PurchaseEventH\x00\x12(\n\x06search\x18\x05 \x01(\x0b\x32\x16.ecommerce.SearchEventH\x00\x12,\n\x08wishlist\x18\x06 \x01(\x0b\x32\x18.ecommerce.WishlistEventH\x00\x12\x38\n\x0erecommendation\x18\x07 \x01(\x0b\x32\x1e.ecommerce.RecommendationEventH\x00\x42\x07\n\x05\x65ventB/\n\x1b\x63om.ortisan.ecommerce.protoB\x0e\x45\x43ommerceProtoP\x01\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(
+    b'\n\x17\x65-commerce-events.proto\x12\tecommerce\x1a\x1fgoogle/protobuf/timestamp.proto"/\n\x04User\x12\n\n\x02id\x18\x01 \x01(\t\x12\r\n\x05\x65mail\x18\x02 \x01(\t\x12\x0c\n\x04name\x18\x03 \x01(\t"Z\n\x07Product\x12\x0b\n\x03sku\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x03 \x01(\t\x12\r\n\x05price\x18\x04 \x01(\x01\x12\x10\n\x08\x63\x61tegory\x18\x05 \x01(\t"\x85\x01\n\x10ProductViewEvent\x12\x1d\n\x04user\x18\x01 \x01(\x0b\x32\x0f.ecommerce.User\x12#\n\x07product\x18\x02 \x01(\x0b\x32\x12.ecommerce.Product\x12-\n\ttimestamp\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp"\x82\x01\n\rPurchaseEvent\x12\x1d\n\x04user\x18\x01 \x01(\x0b\x32\x0f.ecommerce.User\x12#\n\x07product\x18\x02 \x01(\x0b\x32\x12.ecommerce.Product\x12-\n\ttimestamp\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp"|\n\x0e\x45\x43ommerceEvent\x12\x33\n\x0cproduct_view\x18\x01 \x01(\x0b\x32\x1b.ecommerce.ProductViewEventH\x00\x12,\n\x08purchase\x18\x02 \x01(\x0b\x32\x18.ecommerce.PurchaseEventH\x00\x42\x07\n\x05\x65ventB/\n\x1b\x63om.ortisan.ecommerce.protoB\x0e\x45\x43ommerceProtoP\x01\x62\x06proto3'
+)
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
-_builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'e_commerce_events_pb2', _globals)
+_builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, "e_commerce_events_pb2", _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
-  _globals['DESCRIPTOR']._loaded_options = None
-  _globals['DESCRIPTOR']._serialized_options = b'\n\033com.ortisan.ecommerce.protoB\016ECommerceProtoP\001'
-  _globals['_USER']._serialized_start=72
-  _globals['_USER']._serialized_end=220
-  _globals['_PRODUCT']._serialized_start=223
-  _globals['_PRODUCT']._serialized_end=467
-  _globals['_BASEEVENT']._serialized_start=470
-  _globals['_BASEEVENT']._serialized_end=624
-  _globals['_PRODUCTVIEWEVENT']._serialized_start=627
-  _globals['_PRODUCTVIEWEVENT']._serialized_end=773
-  _globals['_ADDTOCARTEVENT']._serialized_start=776
-  _globals['_ADDTOCARTEVENT']._serialized_end=941
-  _globals['_REMOVEFROMCARTEVENT']._serialized_start=943
-  _globals['_REMOVEFROMCARTEVENT']._serialized_end=1063
-  _globals['_PURCHASEEVENT']._serialized_start=1066
-  _globals['_PURCHASEEVENT']._serialized_end=1370
-  _globals['_PURCHASEDITEM']._serialized_start=1373
-  _globals['_PURCHASEDITEM']._serialized_end=1520
-  _globals['_SEARCHEVENT']._serialized_start=1523
-  _globals['_SEARCHEVENT']._serialized_end=1661
-  _globals['_WISHLISTEVENT']._serialized_start=1664
-  _globals['_WISHLISTEVENT']._serialized_end=1832
-  _globals['_WISHLISTEVENT_WISHLISTACTION']._serialized_start=1795
-  _globals['_WISHLISTEVENT_WISHLISTACTION']._serialized_end=1832
-  _globals['_RECOMMENDATIONEVENT']._serialized_start=1835
-  _globals['_RECOMMENDATIONEVENT']._serialized_end=1975
-  _globals['_ECOMMERCEEVENT']._serialized_start=1978
-  _globals['_ECOMMERCEEVENT']._serialized_end=2358
+    _globals["DESCRIPTOR"]._loaded_options = None
+    _globals[
+        "DESCRIPTOR"
+    ]._serialized_options = b"\n\033com.ortisan.ecommerce.protoB\016ECommerceProtoP\001"
+    _globals["_USER"]._serialized_start = 71
+    _globals["_USER"]._serialized_end = 118
+    _globals["_PRODUCT"]._serialized_start = 120
+    _globals["_PRODUCT"]._serialized_end = 210
+    _globals["_PRODUCTVIEWEVENT"]._serialized_start = 213
+    _globals["_PRODUCTVIEWEVENT"]._serialized_end = 346
+    _globals["_PURCHASEEVENT"]._serialized_start = 349
+    _globals["_PURCHASEEVENT"]._serialized_end = 479
+    _globals["_ECOMMERCEEVENT"]._serialized_start = 481
+    _globals["_ECOMMERCEEVENT"]._serialized_end = 605
 # @@protoc_insertion_point(module_scope)

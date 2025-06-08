@@ -6,6 +6,7 @@ from opentelemetry.sdk.trace.export import (
 )
 from opentelemetry.trace import Tracer as TracerOtel
 
+
 class Trace:
     def __init__(self):
         provider = TracerProvider()
@@ -16,7 +17,3 @@ class Trace:
     def create_tracer(self, name: str) -> TracerOtel:
         tracer = trace.get_tracer(name)
         return tracer
-
-
-
-

@@ -1,15 +1,16 @@
 from opentelemetry.metrics import (
     get_meter_provider,
     set_meter_provider,
-UpDownCounter as UpDownCounterOtel,
-Counter as CounterOtel,
-Histogram as HistogramOtel
+    UpDownCounter as UpDownCounterOtel,
+    Counter as CounterOtel,
+    Histogram as HistogramOtel,
 )
 from opentelemetry.sdk.metrics import MeterProvider
 from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
 from opentelemetry.exporter.otlp.proto.grpc.metric_exporter import (
     OTLPMetricExporter,
 )
+
 
 class Meter:
     def __init__(self, appName: str, appVersion: str):
@@ -29,7 +30,9 @@ class Meter:
         """
         return self.meter.create_counter(name, description=description, unit=unit)
 
-    def create_up_down_counter(self, name: str, description: str = "", unit: str = "1") -> UpDownCounterOtel:
+    def create_up_down_counter(
+        self, name: str, description: str = "", unit: str = "1"
+    ) -> UpDownCounterOtel:
         """
         Create an up-down counter metric.
         :param name: Name of the metric.

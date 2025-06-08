@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Black">
-    <option name="sdkName" value="uv (brain)" />
+    <option name="sdkName" value="Python 3.13 virtualenv at ~/Documents/Projects/ai-recommend/.venv" />
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="uv (brain)" project-jdk-type="Python SDK" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_25" project-jdk-name="Python 3.14 (ai-recommend)" project-jdk-type="Python SDK" />
 </project>

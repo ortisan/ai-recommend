@@ -1,177 +1,200 @@
 services:
-  zookeeper:
-    image: confluentinc/cp-zookeeper:latest
-    container_name: zookeeper
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
-    ports:
-      - 2181:2181
-    networks:
-      - ai-network
-    volumes:
-      - zookeeper-data:/var/lib/zookeeper/data
-      - zookeeper-log:/var/lib/zookeeper/log
 
-  kafka:
-    image: confluentinc/cp-kafka:latest
-    container_name: kafka
-    depends_on:
-      - zookeeper
-    ports:
-      - 9092:9092
-      - 29092:29092
-    environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_DELETE_TOPIC_ENABLE: "true"
-      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
-    networks:
-      - ai-network
-    volumes:
-      - kafka-data:/var/lib/kafka/data
 
-  schema-registry:
-    image: confluentinc/cp-schema-registry:latest
-    container_name: schema-registry
-    depends_on:
-      - kafka
-    ports:
-      - 8081:8081
-    environment:
-      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: PLAINTEXT://kafka:29092
-      SCHEMA_REGISTRY_HOST_NAME: schema-registry
-    networks:
-      - ai-network
-
-  kafka-ui:
-    image: provectuslabs/kafka-ui:latest
-    container_name: kafka-ui
-    depends_on:
-      - kafka
-      - schema-registry
-    ports:
-      - 8080:8080
-    environment:
-      KAFKA_CLUSTERS_0_NAME: local
-      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
-      KAFKA_CLUSTERS_0_SCHEMAREGISTRY: http://schema-registry:8081
-    networks:
-      - ai-network
-
-  otel-collector:
-    image: otel/opentelemetry-collector-contrib:latest
-    container_name: otel-collector
-    command: ["--config=/etc/otel-collector-config.yaml"]
-    volumes:
-      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
-    ports:
-      - "4317:4317"   # OTLP gRPC
-      - "4318:4318"   # OTLP HTTP
-      - "8888:8888"   # Metrics endpoint
-    networks:
-      - ai-network
-    depends_on:
-      - prometheus
-      - jaeger
-      - loki
+#  zookeeper:
+#    image: confluentinc/cp-zookeeper:latest
+#    container_name: zookeeper
+#    environment:
+#      ZOOKEEPER_CLIENT_PORT: 2181
+#      ZOOKEEPER_TICK_TIME: 2000
+#    ports:
+#      - 2181:2181
+#    networks:
+#      - recommend-ai-network
+#    volumes:
+#      - zookeeper-data:/var/lib/zookeeper/data
+#      - zookeeper-log:/var/lib/zookeeper/log
 #
-  jaeger:
-    image: jaegertracing/all-in-one:latest
-    container_name: jaeger
-    ports:
-      - "16686:16686"  # UI
-      - "14250:14250"  # Model used by jaeger
-      - "14268:14268"  # HTTP collector
-    networks:
-      - ai-network
+#  kafka:
+#    image: confluentinc/cp-kafka:latest
+#    container_name: kafka
+#    depends_on:
+#      - zookeeper
+#    ports:
+#      - 9092:9092
+#      - 29092:29092
+#    environment:
+#      KAFKA_BROKER_ID: 1
+#      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+#      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+#      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+#      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+#      KAFKA_DELETE_TOPIC_ENABLE: "true"
+#      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+#    networks:
+#      - recommend-ai-network
+#    volumes:
+#      - kafka-data:/var/lib/kafka/data
+#
+#  schema-registry:
+#    image: confluentinc/cp-schema-registry:latest
+#    container_name: schema-registry
+#    depends_on:
+#      - kafka
+#    ports:
+#      - 8081:8081
+#    environment:
+#      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: PLAINTEXT://kafka:29092
+#      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+#    networks:
+#      - recommend-ai-network
+#
+#  kafka-ui:
+#    image: provectuslabs/kafka-ui:latest
+#    container_name: kafka-ui
+#    depends_on:
+#      - kafka
+#      - schema-registry
+#    ports:
+#      - 8080:8080
+#    environment:
+#      KAFKA_CLUSTERS_0_NAME: local
+#      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
+#      KAFKA_CLUSTERS_0_SCHEMAREGISTRY: http://schema-registry:8081
+#    networks:
+#      - recommend-ai-network
 
-  prometheus:
-    image: prom/prometheus:latest
-    container_name: prometheus
+#  otel-collector:
+#    image: otel/opentelemetry-collector-contrib:latest
+#    container_name: otel-collector
+#    command: ["--config=/etc/otel-collector-config.yaml"]
+#    volumes:
+#      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
+#    ports:
+#      - "4317:4317" # OTLP gRPC
+#      - "4318:4318" # OTLP HTTP
+#      - "8888:8888" # Metrics endpoint
+#    networks:
+#      - recommend-ai-network
+#    depends_on:
+#      - prometheus
+#      - jaeger
+#      - loki
+#  #
+#  jaeger:
+#    image: jaegertracing/all-in-one:latest
+#    container_name: jaeger
+#    ports:
+#      - "16686:16686" # UI
+#      - "14250:14250" # Model used by jaeger
+#      - "14268:14268" # HTTP collector
+#    networks:
+#      - recommend-ai-network
+#
+#  prometheus:
+#    image: prom/prometheus:latest
+#    container_name: prometheus
+#    ports:
+#      - "9090:9090"
+#    volumes:
+#      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+#      - prometheus-data:/prometheus
+#    command:
+#      - "--config.file=/etc/prometheus/prometheus.yml"
+#      - "--storage.tsdb.path=/prometheus"
+#      - "--web.console.libraries=/usr/share/prometheus/console_libraries"
+#      - "--web.console.templates=/usr/share/prometheus/consoles"
+#    networks:
+#      - recommend-ai-network
+#
+#  loki:
+#    image: grafana/loki:latest
+#    container_name: loki
+#    ports:
+#      - "3100:3100"
+#    command: -config.file=/etc/loki/local-config.yaml
+#    networks:
+#      - recommend-ai-network
+#
+#  grafana:
+#    image: grafana/grafana:latest
+#    container_name: grafana
+#    ports:
+#      - "3000:3000"
+#    environment:
+#      - GF_SECURITY_ADMIN_USER=admin
+#      - GF_SECURITY_ADMIN_PASSWORD=admin
+#      - GF_USERS_ALLOW_SIGN_UP=false
+#    volumes:
+#      - grafana-data:/var/lib/grafana
+#    networks:
+#      - recommend-ai-network
+#    depends_on:
+#      - prometheus
+#      - loki
+#      - jaeger
+
+  # producer:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.producer
+  #   container_name: kafka-producer
+  #   depends_on:
+  #     - kafka
+  #     - schema-registry
+  #   networks:
+  #     - recommend-ai-network
+  #   environment:
+  #     - KAFKA_BROKER_SERVERS=kafka:29092
+  #     - SCHEMA_REGISTRY_URL=http://schema-registry:8081
+
+  # consumer:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.consumer
+  #   container_name: kafka-consumer
+  #   depends_on:
+  #     - kafka
+  #     - schema-registry
+  #     - producer
+  #   networks:
+  #     - recommend-ai-network
+  #   environment:
+  #     - KAFKA_BROKER_SERVERS=kafka:29092
+  #     - SCHEMA_REGISTRY_URL=http://schema-registry:8081
+  #     - KAFKA_CONSUMER_GROUP=ai_recommend_consumer_group
+  #     - KAFKA_AUTO_OFFSET_RESET=earliest
+  #     - KAFKA_ENABLE_AUTO_COMMIT=true
+
+  postgres:
+    image: pgvector/pgvector:0.8.1-pg16-trixie
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ai_recommend
     ports:
-      - "9090:9090"
+      - "5432:5432"
+    networks:
+      - recommend-ai-network
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
-      - prometheus-data:/prometheus
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
-      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
-      - '--web.console.templates=/usr/share/prometheus/consoles'
-    networks:
-      - ai-network
-
-  loki:
-    image: grafana/loki:latest
-    container_name: loki
-    ports:
-      - "3100:3100"
-    command: -config.file=/etc/loki/local-config.yaml
-    networks:
-      - ai-network
-
-  grafana:
-    image: grafana/grafana:latest
-    container_name: grafana
-    ports:
-      - "3000:3000"
-    environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=admin
-      - GF_USERS_ALLOW_SIGN_UP=false
-    volumes:
-      - grafana-data:/var/lib/grafana
-    networks:
-      - ai-network
-    depends_on:
-      - prometheus
-      - loki
-      - jaeger
-
-
-  producer:
-    build:
-      context: .
-      dockerfile: Dockerfile.producer
-    container_name: kafka-producer
-    depends_on:
-      - kafka
-      - schema-registry
-    networks:
-      - ai-network
-    environment:
-      - KAFKA_BROKER_SERVERS=kafka:29092
-      - SCHEMA_REGISTRY_URL=http://schema-registry:8081
-
-  consumer:
-    build:
-      context: .
-      dockerfile: Dockerfile.consumer
-    container_name: kafka-consumer
-    depends_on:
-      - kafka
-      - schema-registry
-      - producer
-    networks:
-      - ai-network
-    environment:
-      - KAFKA_BROKER_SERVERS=kafka:29092
-      - SCHEMA_REGISTRY_URL=http://schema-registry:8081
-      - KAFKA_CONSUMER_GROUP=ai_recommend_consumer_group
-      - KAFKA_AUTO_OFFSET_RESET=earliest
-      - KAFKA_ENABLE_AUTO_COMMIT=true
+      - postgres-data:/var/lib/postgresql/data
+#      - ./.deploy/scripts:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 networks:
-  ai-network:
+  recommend-ai-network:
     driver: bridge
 
 volumes:
-  zookeeper-data:
-  zookeeper-log:
-  kafka-data:
-  prometheus-data:
-  grafana-data:
+#  zookeeper-data:
+#  zookeeper-log:
+#  kafka-data:
+#  prometheus-data:
+#  grafana-data:
+  postgres-data:
+
