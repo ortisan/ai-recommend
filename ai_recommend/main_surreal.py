@@ -33,6 +33,24 @@
 # asyncio.run(main())
 
 
+from surrealdb.data.types.table import Table
+
+class RelationTable(Table):
+    """
+    Represents a relation table in SurrealDB.
+
+    Inherits from the Table class to represent a database table by its name.
+    """
+
+    def __init__(self) -> None:
+        """
+        Initializes a RelationTable object with a specific table name.
+
+        Args:
+            table_name: The name of the relation table.
+        """
+        super().__init__("relation")
+
 # Import the Surreal class
 from surrealdb import Surreal
 
@@ -65,6 +83,13 @@ with Surreal("ws://localhost:8000/rpc") as db:
     print(product_record)
     print(db.select("product"))
 
+
+    print("### XPTO", person_record["id"])
+    relation = db.insert_relation("likes", {
+        "in": person_record['id'],
+        "out": product_record['id'],
+    })
+    print(relation)
 
 
     # Read all the records in the table

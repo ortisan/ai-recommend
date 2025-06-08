@@ -133,3 +133,7 @@ surreal sql -e http://localhost:8000 -u root -p 'Password'
 ```sql
 INFO FOR ROOT
 ```
+
+### Visualize SurrealDB
+
+https://surrealdb.com/surrealist?download
