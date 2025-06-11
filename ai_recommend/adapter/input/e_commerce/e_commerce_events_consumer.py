@@ -7,13 +7,16 @@ from ai_recommend.infrastructure.kafka.config import KafkaConsumerConfig
 from ai_recommend.infrastructure.observability.logger.logger import Logger
 from confluent_kafka.serialization import SerializationContext, MessageField
 
+from ai_recommend.adapter.output.repository.user_product_repository import UserProductRepository
+
 from ai_recommend.infrastructure.observability.meter.meter import Meter
 from ai_recommend.infrastructure.observability.trace.trace import Trace
 
 
 class ECommerceEventsConsumer:
-    def __init__(self, config: KafkaConsumerConfig, logger: Logger, trace: Trace, meter: Meter):
+    def __init__(self, config: KafkaConsumerConfig, user_product_repository: UserProductRepository, logger: Logger, trace: Trace, meter: Meter):
         self.config = config
+        self.user_product_repository = user_product_repository
         self.logger = logger
         self.trace = trace
         self.meter = meter
@@ -76,5 +79,3 @@ class ECommerceEventsConsumer:
         This method should be overridden by subclasses to implement specific event handling logic.
         """
         self.logger.log(f"Received event: {event}")
-        # Implement specific event handling logic here
-        # For example, you can process the event and store it in a database or perform some action based on the event type

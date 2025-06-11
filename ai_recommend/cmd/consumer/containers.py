@@ -1,10 +1,13 @@
 from dependency_injector import containers, providers
 
 from ai_recommend.adapter.input.e_commerce.e_commerce_events_consumer import ECommerceEventsConsumer
+from ai_recommend.adapter.output.repository.user_product_repository import UserProductRepository
 from ai_recommend.infrastructure.kafka.config import KafkaConsumerConfig
 from ai_recommend.infrastructure.observability.logger.loguru.loguru import LoggerLoguru
 from ai_recommend.infrastructure.observability.meter.meter import Meter
 from ai_recommend.infrastructure.observability.trace.trace import Trace
+from ai_recommend.infrastructure.db.config import DatabaseConfig
+from ai_recommend.infrastructure.db.surreal_db import SurrealDb
 
 
 class CmdContainer(containers.DeclarativeContainer):
@@ -27,6 +30,25 @@ class CmdContainer(containers.DeclarativeContainer):
         app_version=config.application.version,
     )
 
+    database_config = providers.Factory(
+        DatabaseConfig,
+        url=config.database.url,
+        username=config.database.username,
+        password=config.database.password,
+        namespace=config.database.namespace,
+        database=config.database.database,
+    )
+
+    database = providers.Singleton(
+        SurrealDb,
+        config=database_config,
+    )
+
+    user_repository = providers.Factory(
+        UserProductRepository,
+        database=database,
+    )
+
     kafka_consumer_config = providers.Factory(
         KafkaConsumerConfig,
         bootstrap_servers=config.kafka.broker_servers,
@@ -41,6 +63,7 @@ class CmdContainer(containers.DeclarativeContainer):
     e_commerce_events_consumer = providers.Singleton(
         ECommerceEventsConsumer,
         config=kafka_consumer_config,
+        user_product_repository=user_repository,
         logger=logger,
     )
 

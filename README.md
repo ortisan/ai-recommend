@@ -4,7 +4,7 @@
 
 ### Create stubs
 ```shell
-python3 -m grpc_tools.protoc -I=schemas --python_out=ai_recommend/adapter/stub schemas/e-commerce-events.proto
+uv run python3 -m grpc_tools.protoc -I=schemas --python_out=ai_recommend/adapter/stub schemas/e-commerce-events.proto
 ```
 
 ### Create topics in Kafka

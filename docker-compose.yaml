@@ -69,23 +69,23 @@ services:
     volumes:
       - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
     ports:
-      - "4317:4317"   # OTLP gRPC
-      - "4318:4318"   # OTLP HTTP
-      - "8888:8888"   # Metrics endpoint
+      - "4317:4317" # OTLP gRPC
+      - "4318:4318" # OTLP HTTP
+      - "8888:8888" # Metrics endpoint
     networks:
       - ai-network
     depends_on:
       - prometheus
       - jaeger
       - loki
-#
+  #
   jaeger:
     image: jaegertracing/all-in-one:latest
     container_name: jaeger
     ports:
-      - "16686:16686"  # UI
-      - "14250:14250"  # Model used by jaeger
-      - "14268:14268"  # HTTP collector
+      - "16686:16686" # UI
+      - "14250:14250" # Model used by jaeger
+      - "14268:14268" # HTTP collector
     networks:
       - ai-network
 
@@ -98,10 +98,10 @@ services:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus-data:/prometheus
     command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
-      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
-      - '--web.console.templates=/usr/share/prometheus/consoles'
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.console.libraries=/usr/share/prometheus/console_libraries"
+      - "--web.console.templates=/usr/share/prometheus/consoles"
     networks:
       - ai-network
 
@@ -132,38 +132,37 @@ services:
       - loki
       - jaeger
 
+  # producer:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.producer
+  #   container_name: kafka-producer
+  #   depends_on:
+  #     - kafka
+  #     - schema-registry
+  #   networks:
+  #     - ai-network
+  #   environment:
+  #     - KAFKA_BROKER_SERVERS=kafka:29092
+  #     - SCHEMA_REGISTRY_URL=http://schema-registry:8081
 
-  producer:
-    build:
-      context: .
-      dockerfile: Dockerfile.producer
-    container_name: kafka-producer
-    depends_on:
-      - kafka
-      - schema-registry
-    networks:
-      - ai-network
-    environment:
-      - KAFKA_BROKER_SERVERS=kafka:29092
-      - SCHEMA_REGISTRY_URL=http://schema-registry:8081
-
-  consumer:
-    build:
-      context: .
-      dockerfile: Dockerfile.consumer
-    container_name: kafka-consumer
-    depends_on:
-      - kafka
-      - schema-registry
-      - producer
-    networks:
-      - ai-network
-    environment:
-      - KAFKA_BROKER_SERVERS=kafka:29092
-      - SCHEMA_REGISTRY_URL=http://schema-registry:8081
-      - KAFKA_CONSUMER_GROUP=ai_recommend_consumer_group
-      - KAFKA_AUTO_OFFSET_RESET=earliest
-      - KAFKA_ENABLE_AUTO_COMMIT=true
+  # consumer:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.consumer
+  #   container_name: kafka-consumer
+  #   depends_on:
+  #     - kafka
+  #     - schema-registry
+  #     - producer
+  #   networks:
+  #     - ai-network
+  #   environment:
+  #     - KAFKA_BROKER_SERVERS=kafka:29092
+  #     - SCHEMA_REGISTRY_URL=http://schema-registry:8081
+  #     - KAFKA_CONSUMER_GROUP=ai_recommend_consumer_group
+  #     - KAFKA_AUTO_OFFSET_RESET=earliest
+  #     - KAFKA_ENABLE_AUTO_COMMIT=true
 
 networks:
   ai-network:

@@ -13,21 +13,24 @@ def main(producer: ECommerceEventsProducer = Provide[CmdContainer.e_commerce_eve
 
     timestamp = Timestamp()
 
-    base_event = e_commerce_events_pb2.BaseEvent(
-        event_id=str(uuid4()),
-        user_id=str(uuid4()),
-        session_id=str(uuid4()),
-        timestamp=timestamp,
-        device_type="web",
-        ip_address="127.0.0.1",
+    user = e_commerce_events_pb2.User(
+        id: str(uuid4()),
+        email: "teste@teste.com",
+        name: "Marcelo Ortiz de Santana",
+    )
+
+    product = e_commerce_events_pb2.Product(
+        sku: str(uuid4()),
+        name: "Iphone 16",
+        description: "Smartphone Iphone 16",
+        price: 10000.0,
+        category: "Eletronics",
     )
 
     product_viewed_event = e_commerce_events_pb2.ProductViewEvent(
-        base=base_event,
-        product_sku="sku_12345",
-        view_duration_seconds=30,
-        referrer_url="teste.com",
-        page_url="teste.com/product/12345",
+        user: user,
+        product: product,
+        timestamp: timestamp
     )
     e_commerce_event = e_commerce_events_pb2.ECommerceEvent(
         product_view=product_viewed_event

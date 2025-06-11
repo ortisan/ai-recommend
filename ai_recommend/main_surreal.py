@@ -1,38 +1,3 @@
-# import asyncio
-# from surrealdb import Surreal
-#
-# async def main():
-#     db = Surreal()
-#
-#     # Connect to the remote server
-#     await db.connect("http://localhost:8000")  # or "https://your-server:8000"
-#
-#     # Sign in with root credentials
-#     await db.signin({
-#         "user": "root",
-#         "pass": "Password"
-#     })
-#
-#     # Select namespace and database
-#     await db.use("test", "test")
-#
-#     # Create a record
-#     created = await db.create("person", {
-#         "name": "Alice",
-#         "age": 30
-#     })
-#     print("Created:", created)
-#
-#     # Select records
-#     people = await db.select("person")
-#     print("People:", people)
-#
-#     await db.close()
-#
-# # Run the async function
-# asyncio.run(main())
-
-
 from surrealdb.data.types.table import Table
 
 class RelationTable(Table):
@@ -60,7 +25,7 @@ with Surreal("ws://localhost:8000/rpc") as db:
     db.use("user_product", "user_product_relation")
 
     # Create a record in the person table
-    person_record = db.create(
+    person_record = db.upsert(
         "person",
         {
             "name": "Marcelo Ortiz de Santana",

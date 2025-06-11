@@ -2,6 +2,13 @@ application:
   name: ai_recommend_consumer
   version: 1.0.0
 
+database:
+  url: ws://localhost:8000/rpc
+  username: root
+  password: Password
+  namespace: user_product
+  database: user_product_relation
+
 kafka:
   broker_servers: localhost:9092
   consumer_group: ai_recommend_consumer_group
