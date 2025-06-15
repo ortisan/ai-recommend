@@ -1,4 +1,4 @@
-# TiKV Exporter
+# TiKV Key Exporter
 
 This application connects to a TiKV database, scans all keys, and exports them to a JSON file.
 
@@ -15,9 +15,7 @@ Build the Docker image with the following command:
 ```bash
 docker build -t marceloorsa/tikv-get-keys:latest .
 docker push marceloorsa/tikv-get-keys:latest
-
 ```
-
 
 ## Running in Kubernetes
 
@@ -61,3 +59,4 @@ The application can be configured using environment variables:
 
 - The application will scan up to 10,000 keys by default
 - The output file is named `tikv_keys.json`
+- This tool is useful for verifying the contents of your TiKV database

@@ -1,6 +1,6 @@
-# TiKV Exporter
+# SurrealDB TiKV Key Initializer
 
-This application connects to a TiKV database, put surreal db keys (!v=02).
+This application connects to a TiKV database and adds the special SurrealDB v2 mode key (`!v=\u0000\u0002`).
 
 ## Prerequisites
 
@@ -15,9 +15,7 @@ Build the Docker image with the following command:
 ```bash
 docker build -t marceloorsa/tikv-put-surreal-v2-keys:latest .
 docker push marceloorsa/tikv-put-surreal-v2-keys:latest
-
 ```
-
 
 ## Running in Kubernetes
 
@@ -59,5 +57,5 @@ The application can be configured using environment variables:
 
 ## Notes
 
-- The application will scan up to 10,000 keys by default
+- This tool is required to prepare TiKV for use with SurrealDB in v2 mode
 - The output file is named `tikv_keys.json`

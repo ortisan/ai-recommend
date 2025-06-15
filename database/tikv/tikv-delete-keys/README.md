@@ -1,6 +1,6 @@
-# TiKV Exporter
+# TiKV Key Deletion Tool
 
-This application connects to a TiKV database, delete all keys.
+This application connects to a TiKV database and deletes all keys.
 
 ## Prerequisites
 
@@ -15,9 +15,7 @@ Build the Docker image with the following command:
 ```bash
 docker build -t marceloorsa/tikv-delete-keys:latest .
 docker push marceloorsa/tikv-delete-keys:latest
-
 ```
-
 
 ## Running in Kubernetes
 
@@ -41,13 +39,13 @@ kubectl get pods
 4. View the logs:
 
 ```bash
-kubectl logs tikv-exporter
+kubectl logs tikv-delete-keys
 ```
 
 5. Once the Pod has completed running, you can copy the output file:
 
 ```bash
-kubectl cp tikv-exporter:/app/output/tikv_keys.json ./tikv_keys.json
+kubectl cp tikv-delete-keys:/app/output/tikv_keys.json ./tikv_keys.json
 ```
 
 ## Configuration
