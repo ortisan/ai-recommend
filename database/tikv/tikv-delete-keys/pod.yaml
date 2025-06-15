@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: tikv-delete-keys
+  labels:
+    app: tikv-delete-keys
+spec:
+  containers:
+  - name: tikv-delete-keys
+    image: marceloorsa/tikv-delete-keys:latest
+    imagePullPolicy: IfNotPresent
+    command: ["/bin/sh", "-c"]
+    args:
+      - |
+        /app/tikv-delete-keys   # Or whatever your main binary is called
+        echo "Main process completed. Sleeping for 60 minutes for troubleshooting..."
+        sleep 3600
+    env:
+    - name: PD_ENDPOINTS
+      value: "basic-pd-0.basic-pd-peer.tikv.svc:2379"

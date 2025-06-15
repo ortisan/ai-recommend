@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: tikv-get-keys
+  labels:
+    app: tikv-get-keys
+spec:
+  containers:
+  - name: tikv-get-keys
+    image: marceloorsa/tikv-get-keys:latest
+    imagePullPolicy: IfNotPresent
+    command: ["/bin/sh", "-c"]
+    args:
+      - |
+        /app/tikv-get-keys   # Or whatever your main binary is called
+        echo "Main process completed. Sleeping for 60 minutes for troubleshooting..."
+        sleep 3600
+    env:
+    - name: PD_ENDPOINTS
+      value: "basic-pd-0.basic-pd-peer.tikv.svc:2379"
+    - name: OUTPUT_DIR
+      value: "/app/output"
+    volumeMounts:
+    - name: output-volume
+      mountPath: /app/output
+  volumes:
+  - name: output-volume
+    hostPath:
+      path: "/opt/output"
+      type: DirectoryOrCreate

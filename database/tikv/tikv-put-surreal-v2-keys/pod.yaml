@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: tikv-put-surreal-v2-keys
+  labels:
+    app: tikv-put-surreal-v2-keys
+spec:
+  containers:
+  - name: tikv-put-surreal-v2-keys
+    image: marceloorsa/tikv-put-surreal-v2-keys:latest
+    imagePullPolicy: IfNotPresent
+    command: ["/bin/sh", "-c"]
+    args:
+      - |
+        /app/tikv-put-surreal-v2-keys   # Or whatever your main binary is called
+        echo "Main process completed. Sleeping for 60 minutes for troubleshooting..."
+        sleep 3600
+    env:
+    - name: PD_ENDPOINTS
+      value: "basic-pd-0.basic-pd-peer.tikv.svc:2379"
