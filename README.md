@@ -246,3 +246,20 @@ The following services are available in the system:
 ## Development
 
 For development purposes, you can use the provided Docker Compose file to run the necessary services locally. The project includes producer and consumer components for processing e-commerce events.
+
+
+## Observability
+
+
+
+```shell
+helm repo add open-telemetry https://open-telemetry.github.io/opentelemetry-helm-charts
+```
+
+
+helm repo add open-telemetry https://open-telemetry.github.io/opentelemetry-helm-charts
+helm install my-opentelemetry-operator open-telemetry/opentelemetry-operator \
+  --set "manager.collectorImage.repository=otel/opentelemetry-collector-k8s" \
+  --set admissionWebhooks.certManager.enabled=false \
+  --set admissionWebhooks.autoGenerateCert.enabled=true
+
