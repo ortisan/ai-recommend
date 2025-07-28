@@ -27,4 +27,9 @@ impl <T: UserRepository> UserService<T> {
         let get_by_id_result = self.user_repository.get_by_id(user_id).await?;
         Ok(UserDomain::from(get_by_id_result))
     }
+
+    pub async fn delete_user_by_id(&self, user_id: String) -> Result<(), Error> {
+        let delete_result = self.user_repository.delete_by_id(user_id).await?;
+        Ok(delete_result)
+    }
 }

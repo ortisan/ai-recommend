@@ -1,14 +1,9 @@
 use crate::infrastructure::surrealdb::DbConfig;
-use crate::models::user_repository::{UserRepository, UserRepositorySurreal};
+use crate::models::user_repository::{UserRepositorySurreal};
 use crate::presentation::routes::user_routes;
 use crate::services::user_service::UserService;
 use actix_web::middleware::Logger;
 use actix_web::{App, HttpServer, web};
-use std::sync::LazyLock;
-use surrealdb::Surreal;
-use surrealdb::engine::remote::ws::Client;
-
-static DB: LazyLock<Surreal<Client>> = LazyLock::new(Surreal::init);
 
 mod domain;
 mod infrastructure;
@@ -58,7 +53,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let app_data_service = web::Data::new(user_service);
 
-    HttpServer::new(move || {
+    let result = HttpServer::new(move || {
         App::new()
             .app_data(app_data_service.clone())
             .wrap(Logger::default())
@@ -66,7 +61,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     })
     .bind("0.0.0.0:8080")?
     .run()
-    .await;
+    .await?;
 
-    Ok(())
+    Ok(result)
 }

@@ -24,6 +24,7 @@ impl UserRepositorySurreal {
 pub trait UserRepository {
     async fn create(&self, model: UserModel) -> Result<UserModel, Error>;
     async fn get_by_id(&self, id: String) -> Result<UserModel, Error>;
+    async fn delete_by_id(&self, id: String) -> Result<(), Error>;
 }
 
 impl UserRepository for UserRepositorySurreal {
@@ -43,5 +44,10 @@ impl UserRepository for UserRepositorySurreal {
         }
         let error = Error::Db(Thrown(format!("User with id {} not found", id)));
         Err(error)
+    }
+
+    async fn delete_by_id(&self, id: String) -> Result<(), Error> {
+        let delete_result = self.db.delete((&self.table, id)).await?;
+        Ok(delete_result.unwrap())
     }
 }
