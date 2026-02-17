@@ -27,10 +27,12 @@ app.add_middleware(
 # Serve static files
 app.mount("/static", StaticFiles(directory="."), name="static")
 
+
 @app.get("/")
 async def root():
     """Serve the chat interface HTML file."""
     return FileResponse("app_agent.html")
+
 
 model_config_path = "model_config.yaml"
 state_path = "agent_state.json"
@@ -79,7 +81,9 @@ async def chat(request: TextMessage) -> TextMessage:
     try:
         # Get the agent and respond to the message.
         agent = await get_agent()
-        response = await agent.on_messages(messages=[request], cancellation_token=CancellationToken())
+        response = await agent.on_messages(
+            messages=[request], cancellation_token=CancellationToken()
+        )
 
         # Save agent state to file.
         state = await agent.save_state()
@@ -96,11 +100,7 @@ async def chat(request: TextMessage) -> TextMessage:
         assert isinstance(response.chat_message, TextMessage)
         return response.chat_message
     except Exception as e:
-        error_message = {
-            "type": "error",
-            "content": f"Error: {str(e)}",
-            "source": "system"
-        }
+        error_message = {"type": "error", "content": f"Error: {str(e)}", "source": "system"}
         raise HTTPException(status_code=500, detail=error_message) from e
 
 

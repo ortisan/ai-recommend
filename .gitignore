@@ -1,6 +1,8 @@
 # Python-generated files
 __pycache__/
 *.py[oc]
+*.pyo
+*.pyc
 build/
 dist/
 wheels/
@@ -9,8 +11,46 @@ wheels/
 
 # Virtual environments
 .venv/
+venv/
+ENV/
+env/
 
+# Python environment
 .env
+.env.local
+.env.*.local
 
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
 
+# OS
 .DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+
+# Python cache
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+*.cover
+.hypothesis/
+
+# Distribution
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+*.cover
+.pytest_cache/
+.tox/
+
+# IDEs
+.vscode/
+.sublime-project
+.sublime-workspace

@@ -90,6 +90,7 @@ if __name__ == "__main__":
     container = ApplicationContainer()
 
     # Configure database settings from environment using from_dict()
+
     container.config.from_dict(
         {
             "database": {
@@ -100,6 +101,11 @@ if __name__ == "__main__":
                     "password": os.getenv("GRAPH_DB_PASSWORD"),
                     "database": os.getenv("GRAPH_DB_DATABASE_NAME"),
                 }
+            },
+            "ai": {
+                "openai_api_key": os.getenv("OPENAI_API_KEY"),
+                "ai_provider": os.getenv("AI_PROVIDER"),
+                "ai_model": os.getenv("AI_MODEL"),
             }
         }
     )
