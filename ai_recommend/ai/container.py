@@ -14,4 +14,4 @@ class AIContainer(containers.DeclarativeContainer):
         api_key=config.openai_api_key,
     )
 
-    agent = providers.Singleton(AgentFactory, model_client=model_client)
+    agent_factory = providers.Singleton(AgentFactory, model_client=model_client)

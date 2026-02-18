@@ -106,7 +106,7 @@ if __name__ == "__main__":
                 "openai_api_key": os.getenv("OPENAI_API_KEY"),
                 "ai_provider": os.getenv("AI_PROVIDER"),
                 "ai_model": os.getenv("AI_MODEL"),
-            }
+            },
         }
     )
 
